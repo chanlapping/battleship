@@ -21,7 +21,7 @@ function shipFactory(type) {
         hits++;
     }
 
-    return {isSunk, hit};
+    return {isSunk, hit, length};
 }
 
 module.exports = shipFactory;
