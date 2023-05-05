@@ -12,12 +12,28 @@ export default function gameBoardFactory() {
         const ship = shipFactory(shipType);
 
         if (direction == 'h') {
+            if (x + ship.length > 9) {
+                return;
+            }
             for (let i = 0; i < ship.length; i++) {
-                content[x + i, y] = 1;
+                if (content[x + i][y] == 1) {
+                    return;
+                }
+            }
+            for (let i = 0; i < ship.length; i++) {
+                content[x + i][y] = 1;
             }
         } else {
+            if (y + ship.length > 9) {
+                return;
+            }
             for (let i = 0; i < ship.length; i++) {
-                content[x, y + i] = 1;
+                if (content[x][y + i] == 1) {
+                    return;
+                }
+            }
+            for (let i = 0; i < ship.length; i++) {
+                content[x][y + i] = 1;
             }
         }
 
