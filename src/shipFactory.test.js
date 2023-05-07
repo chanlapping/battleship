@@ -1,4 +1,4 @@
-const shipFactory = require('./shipFactory');
+import shipFactory from "./shipFactory";
 
 test('new ship is not sunk', () => {
     const patrol = shipFactory('patrol');
@@ -18,4 +18,5 @@ test('when hit not enough times the ship is not sunk', () => {
     submarine.hit();
     submarine.hit();
     expect(submarine.isSunk()).toBe(false);
+    expect(submarine.getNumberOfHits()).toBe(2);
 });

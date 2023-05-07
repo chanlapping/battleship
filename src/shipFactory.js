@@ -1,5 +1,5 @@
-function shipFactory(type) {
-    let hits = 0;
+export default function shipFactory(type) {
+    let numberOfHits = 0;
     let length = 0;
     if (type == 'carrier') {
         length = 5;
@@ -13,15 +13,17 @@ function shipFactory(type) {
         length = 2;
     }
 
+    const getLength = () => length;
+
+    const getNumberOfHits = () => numberOfHits;
+
     const isSunk = () => {
-        return hits == length;
-    }
+        return numberOfHits == length;
+    };
 
     const hit = () => {
-        hits++;
-    }
+        numberOfHits++;
+    };
 
-    return {isSunk, hit, length};
+    return {getLength, getNumberOfHits, isSunk, hit};
 }
-
-module.exports = shipFactory;
