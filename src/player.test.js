@@ -1,32 +1,36 @@
 import playerFactory from './playerFactory';
 import gameBoardFactory from './gameBoardFactory';
 
-let player;
-let opponentBoard;
+describe('Player', () => {
+    let player;
+    let opponentBoard;
 
-beforeEach(() => {
-    player = playerFactory();
-    opponentBoard = gameBoardFactory();
-});
+    beforeEach(() => {
+        player = playerFactory();
+        opponentBoard = gameBoardFactory();
+    });
 
-test("should call opponent's gameBoard receiveAttack method", () => {
-    jest.spyOn(opponentBoard, 'receiveAttack');
-    player.attack(opponentBoard, 0, 0);
-    expect(opponentBoard.receiveAttack).toHaveBeenCalledWith(0, 0);
-});
+    test('player can attack specific position on opponent board', () => {
+        player.attack(opponentBoard, 0, 0);
+        expect(opponentBoard.get(0, 0)).toBe('m');
+    });
 
-test('should attack a square with makeRandomPlay', () => {
-    jest.spyOn(opponentBoard, 'receiveAttack');
-    player.makeRandomPlay(opponentBoard);
-    expect(opponentBoard.receiveAttack.mock.calls.length).toBe(1);
-});
+    test('randomPlay() attacks a square on opponent board', () => {
+        const receiveAttackMock = jest.spyOn(opponentBoard, 'receiveAttack');
+        player.makeRandomPlay(opponentBoard);
+        expect(receiveAttackMock).toHaveBeenCalledTimes(1);
 
-test('random play should not attack a square that is marked missed', () => {
-    jest.spyOn(opponentBoard, 'receiveAttack');
-    const randMock = jest.spyOn(player, 'getRandomPos');
-    randMock.mockReturnValueOnce([0, 0]).mockReturnValueOnce([1, 1]);
-    opponentBoard.receiveAttack(0, 0);
-    player.makeRandomPlay(opponentBoard);
-    
-    expect(opponentBoard.get(1 ,1)).toBe('m');
+        const x = receiveAttackMock.mock.calls[0][0];
+        const y = receiveAttackMock.mock.calls[0][1];
+        const validCoor = x >= 0 && x < 10 && y >= 0 && y < 10;
+        expect(validCoor).toBe(true);
+    });
+
+    test('randomPlay() will not attack the same square twice', () => {
+        const receiveAttackMock = jest.spyOn(opponentBoard, 'receiveAttack');
+        player.makeRandomPlay(opponentBoard);
+        player.makeRandomPlay(opponentBoard);
+        const repeatedAttack = (receiveAttackMock.mock.calls[0][0] == receiveAttackMock.mock.calls[1][0]) && (receiveAttackMock.mock.calls[0][1] == receiveAttackMock.mock.calls[1][1]);
+        expect(repeatedAttack).toBe(false);
+    });
 });

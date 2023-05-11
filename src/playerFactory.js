@@ -7,20 +7,15 @@ export default function playerFactory() {
     };
 
     const makeRandomPlay = (board) => {
-        let pos;
+        let x;
+        let y;
         do {
-            pos = getRandomPos();
-        } while (board.get(pos[0], pos[1]) == 'x' || board.get(pos[0], pos[1]) == 'm');
-        attack(board, pos[0], pos[1]);
+            x = Math.floor(Math.random() * 10);
+            y = Math.floor(Math.random() * 10);
+        } while (board.get(x, y) == 'x' || board.get(x, y) == 'm');
+        attack(board, x, y);
     };
 
-    const getRandomPos = () => {
-        let x = Math.floor(Math.random() * 10);
-        let y = Math.floor(Math.random() * 10);
-        
-        return [x, y];
-    }
-
-    return {attack, makeRandomPlay, getRandomPos};
+    return {attack, makeRandomPlay};
 
 }
