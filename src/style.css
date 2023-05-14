@@ -20,6 +20,14 @@ body {
     align-items: center;
 }
 
-.square.ship {
+#player-board .square.ship {
     background-color: gray;
+}
+
+.square.hit {
+    background-color: red;
+}
+
+.square.missed {
+    background-color: green;
 }

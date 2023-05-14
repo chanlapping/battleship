@@ -1,19 +1,30 @@
 
 
 export function displayBoard(board, container, mode) {
+    container.innerHTML = '';
     for (let y = 0; y < 10; y++) {
         for (let x = 0; x < 10; x++) {
             const content = board.get(x, y);
+            const square = document.createElement('div');
+            square.classList.add('square');
             if (content == 'm') {
-                container.innerHTML += `<div class="square missed"></div>`;
+                square.classList.add('missed');
             } else if (content == 'x') {
-                container.innerHTML += `<div class="square hit"></div>`;
-            } else if (mode == 'player' && content != 'e') {
-                container.innerHTML += `<div class="square ship"></div>`;
-            } else {
-                container.innerHTML += `<div class="square"></div>`;
+                square.classList.add('hit');
+            } else if (content != 'e') {
+                square.classList.add('ship');
             }
-            
+            container.appendChild(square);
+            if (mode == 'computer') {
+                square.addEventListener('click', () => {
+                    if (content == 'x' || content == 'm') {
+                        return;
+                    }
+                    board.receiveAttack(x, y);
+                    displayBoard(board, container, mode);
+                });
+            }
+
         }
     }
 }

@@ -29,4 +29,4 @@ computerBoard.placeShip('carrier', 'v', 6, 4);
 const playerBoardDisplay = document.querySelector('#player-board');
 const computerBoardDisplay = document.querySelector('#computer-board');
 gameDOM.displayBoard(playerBoard, playerBoardDisplay, 'player');
-gameDOM.displayBoard(computerBoard, computerBoardDisplay);
+gameDOM.displayBoard(computerBoard, computerBoardDisplay, 'computer');
