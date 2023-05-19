@@ -1,24 +1,18 @@
-export default function shipFactory(type) {
-    let numberOfHits = 0;
-    let length = 0;
-    if (type == 'carrier') {
-        length = 5;
-    } else if (type == 'battleship') {
-        length = 4;
-    } else if (type == 'destroyer') {
-        length = 3;
-    } else if (type == 'submarine') {
-        length = 3;
-    } else if (type == 'patrol') {
-        length = 2;
-    }
+const PATROL_LENGTH = 2;
+const SUBMARINE_LENGTH = 3;
+const DESTROYER_LENGTH = 3;
+const BATTLESHIP_LENGTH = 4;
+const CARRIER_LENGTH = 5;
 
+function shipFactory(length) {
+    let numberOfHits = 0;
+    
     const getLength = () => length;
 
     const getNumberOfHits = () => numberOfHits;
 
     const isSunk = () => {
-        return numberOfHits == length;
+        return numberOfHits === length;
     };
 
     const hit = () => {
@@ -27,3 +21,5 @@ export default function shipFactory(type) {
 
     return {getLength, getNumberOfHits, isSunk, hit};
 }
+
+export {PATROL_LENGTH, SUBMARINE_LENGTH, DESTROYER_LENGTH, BATTLESHIP_LENGTH, CARRIER_LENGTH, shipFactory};

@@ -1,13 +1,13 @@
 import { experiments } from "webpack";
-import shipFactory from "./shipFactory";
+import { shipFactory, PATROL, SUBMARINE, DESTROYER, BATTLESHIP, CARRIER, PATROL_LENGTH, SUBMARINE_LENGTH, DESTROYER_LENGTH, BATTLESHIP_LENGTH, CARRIER_LENGTH } from "./shipFactory";
 
 describe('shipFactory', () => {
 
-    const submarine =shipFactory('submarine');
-    const patrol = shipFactory('patrol');
-    const destroyer = shipFactory('destroyer');
-    const battleship = shipFactory('battleship');
-    const carrier = shipFactory('carrier');
+    const patrol = shipFactory(PATROL_LENGTH);
+    const submarine = shipFactory(SUBMARINE_LENGTH);
+    const destroyer = shipFactory(DESTROYER_LENGTH);
+    const battleship = shipFactory(BATTLESHIP_LENGTH);
+    const carrier = shipFactory(CARRIER_LENGTH);
 
     test('new ship has 0 hit', () => {
         expect(submarine.getNumberOfHits()).toBe(0);
