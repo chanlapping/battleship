@@ -1,11 +1,20 @@
-const PATROL_LENGTH = 2;
-const SUBMARINE_LENGTH = 3;
-const DESTROYER_LENGTH = 3;
-const BATTLESHIP_LENGTH = 4;
-const CARRIER_LENGTH = 5;
+const PATROL = "P";
+const SUBMARINE = "S";
+const DESTROYER = "D";
+const BATTLESHIP = "B";
+const CARRIER = "C";
 
-function shipFactory(length) {
+const shipLengths = {
+    P: 2,
+    S: 3,
+    D: 3,
+    B: 4,
+    C: 5,
+};
+
+function create(shipType) {
     let numberOfHits = 0;
+    const length = shipLengths[shipType];
     
     const getLength = () => length;
 
@@ -22,4 +31,11 @@ function shipFactory(length) {
     return {getLength, getNumberOfHits, isSunk, hit};
 }
 
-export {PATROL_LENGTH, SUBMARINE_LENGTH, DESTROYER_LENGTH, BATTLESHIP_LENGTH, CARRIER_LENGTH, shipFactory};
+export {
+    PATROL,
+    SUBMARINE,
+    DESTROYER,
+    BATTLESHIP,
+    CARRIER,
+    create
+};
