@@ -12,9 +12,9 @@ const shipLengths = {
     C: 5,
 };
 
-function create(shipType) {
+function create(type) {
     let numberOfHits = 0;
-    const length = shipLengths[shipType];
+    const length = shipLengths[type];
     
     const getLength = () => length;
 

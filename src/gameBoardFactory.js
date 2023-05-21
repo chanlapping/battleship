@@ -1,67 +1,109 @@
-import shipFactory from "./shipFactory";
+import * as shipFactory from "./shipFactory";
 
-export default function gameBoardFactory() {
+export const BOARD_SIZE = 10;
+export const EMPTY = "e";
+export const HIT = "x";
+export const MISSED = "m";
+
+export const HORIZONTAL = "h";
+export const VERTICAL = "v";
+
+export function create() {
     const content = [];
-    const ships = [];
-
-    for (let i = 0; i < 10; i++) {
-        const row = new Array(10);
-        row.fill('e');
+    const ships = {};
+    let shipID = 0;
+    
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        const row = new Array(BOARD_SIZE);
+        row.fill(EMPTY);
         content.push(row);
     }
 
-    const placeShip = (shipType, direction, x, y) => {
-        const ship = shipFactory(shipType);
+    // ships[shipFactory.PATROL] = shipFactory.create(shipFactory.PATROL);
+    // ships[shipFactory.SUBMARINE] = shipFactory.create(shipFactory.SUBMARINE);
+    // ships[shipFactory.DESTROYER] = shipFactory.create(shipFactory.DESTROYER);
+    // ships[shipFactory.BATTLESHIP] = shipFactory.create(shipFactory.BATTLESHIP);
+    // ships[shipFactory.CARRIER] = shipFactory.create(shipFactory.CARRIER);
 
-        if (direction == 'h') {
-            if (x + ship.getLength() > 9) {
-                return;
-            }
+    const getShipID = () => {
+        return shipID++;
+    }
+
+    const placeHorizontalShip = (type, x, y) => {
+        const ship = shipFactory.create(type);
+
+        if (hasEnoughHorizontalSpace(ship, x, y)) {
+            const id = getShipID();
+            ships[id] = ship;
             for (let i = 0; i < ship.getLength(); i++) {
-                if (content[x + i][y] != 'e') {
-                    return;
-                }
+                content[x + i][y] = id;
             }
-            ships.push(ship);
-            const shipId = ships.length - 1;
-            for (let i = 0; i < ship.getLength(); i++) {
-                content[x + i][y] = shipId;
-            }
-        } else {
-            if (y + ship.getLength() > 9) {
-                return;
-            }
-            for (let i = 0; i < ship.getLength(); i++) {
-                if (content[x][y + i] != 'e') {
-                    return;
-                }
-            }
-            ships.push(ship);
-            const shipId = ships.length - 1;
-            for (let i = 0; i < ship.getLength(); i++) {
-                content[x][y + i] = shipId;
+        } 
+    }
+
+    const hasEnoughHorizontalSpace = (ship, x, y) => {
+        if (x + ship.getLength() > BOARD_SIZE) {
+            return false;
+        }
+        for (let i = 0; i < ship.getLength(); i++) {
+            if (content[x + i][y] != EMPTY) {
+                return false;
             }
         }
+        return true;
+    }
+
+    const placeVerticalShip = (type, x, y) => {
+        const ship = shipFactory.create(type);
+
+        if (hasEnoughVerticalSpace(ship, x, y)) {
+            const id = getShipID();
+            ships[id] = ship;
+            for (let i = 0; i < ship.getLength(); i++) {
+                content[x][y + i] = id;
+            }
+        }
+    }
+
+    const hasEnoughVerticalSpace = (ship, x, y) => {
+        if (y + ship.getLength() > BOARD_SIZE) {
+            return false;
+        }
+        for (let i = 0; i < ship.getLength(); i++) {
+            if (content[x][y + i] != EMPTY) {
+                return false;
+            }
+        }
+        return true;
     }
 
     const get = (x, y) => content[x][y];
 
-    const getShip = (index) => ships[index];
+    const getShip = (id) => ships[id];
 
     const receiveAttack = (x, y) => {
-        if (content[x][y] == 'e') {
-            content[x][y] = 'm';
+        if (content[x][y] == EMPTY) {
+            content[x][y] = MISSED;
+            return;
+        }
+
+        if (content[x][y] == MISSED || content[x][y] == HIT) {
             return;
         }
         
         const ship = ships[content[x][y]];
-        content[x][y] = 'x';
+        content[x][y] = HIT;
         ship.hit();
     }
 
     const allSunk = () => {
-        return ships.every(ship => ship.isSunk());
+        for (const id in ships) {
+            if (!ships[id].isSunk()) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    return { get, getShip, placeShip, receiveAttack, allSunk };
+    return { get, getShip, placeHorizontalShip, placeVerticalShip, receiveAttack, allSunk };
 }
